@@ -1,0 +1,331 @@
+@import url('https://fonts.googleapis.com/css?family=Lobster');
+
+.profile-img {
+    width: 20px;
+}
+
+body {
+    background: url("/img/bg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.sign {
+    margin: 5% 0;
+    text-align: center;
+    font-size: 5em;
+    font-family: 'Lobster', serif;
+    animation: flicker 2s infinite;
+}
+
+.sub {
+    margin: 10% 0;
+    text-align: center;
+    justify-content: center;
+}
+
+@keyframes blink-red {
+    0%,
+    22%,
+    36%,
+    75% {
+        color: #E97452;
+        text-shadow: 0 0 0.6rem #E97452, 0 0 1.5rem #D65D42,
+        -0.2rem 0.1rem 1rem #C34632, 0.2rem 0.1rem 1rem #B12E21,
+        0 -0.5rem 2rem #9E1711, 0 0.5rem 3rem #8B0001;
+    }
+    28%,
+    33% {
+        color: #D65D42;
+        text-shadow: none;
+    }
+    82%,
+    97% {
+        color: #8B0001;
+        text-shadow: none;
+    }
+}
+
+@keyframes blink-green {
+    0%,
+    22%,
+    36%,
+    75% {
+        color: #00AB08;
+        text-shadow: 0 0 0.6rem #B7FFBF, 0 0 1.5rem #95F985,
+        -0.2rem 0.1rem 1rem #4DED30, 0.2rem 0.1rem 1rem #26D701,
+        0 -0.5rem 2rem #00C301, 0 0.5rem 3rem #00AB08;
+    }
+    28%,
+    33% {
+        color: #95F985;
+        text-shadow: none;
+    }
+    82%,
+    97% {
+        color: #00AB08;
+        text-shadow: none;
+    }
+}
+
+@keyframes blink-yellow {
+    0%,
+    22%,
+    36%,
+    75% {
+        color: #FFFEE6;
+        text-shadow: 0 0 0.6rem #FFFEE6, 0 0 1.5rem #FFFCC6,
+        -0.2rem 0.1rem 1rem #FFFAA8, 0.2rem 0.1rem 1rem #FFF784,
+        0 -0.5rem 2rem #FFF568, 0 0.5rem 3rem #FFEF43;
+    }
+    28%,
+    33% {
+        color: #FFFCC6;
+        text-shadow: none;
+    }
+    82%,
+    97% {
+        color: #FFEF43;
+        text-shadow: none;
+    }
+}
+
+.craft {
+    animation: shine-green 2s forwards, blink-green 13s 1s infinite;
+}
+.lucky {
+    animation: shine-yellow 2s forwards, blink-yellow 10s 1s infinite;
+}
+
+.op {
+    animation: shine-red 2s forwards, blink-red 7s 1s infinite;
+}
+
+@keyframes shine-green {
+    0% {
+        color: #00AB08;
+        text-shadow: none;
+    }
+    100% {
+        color: #00AB08;
+        text-shadow: 0 0 0.6rem #B7FFBF, 0 0 1.5rem #95F985,
+        -0.2rem 0.1rem 1rem #4DED30, 0.2rem 0.1rem 1rem #26D701,
+        0 -0.5rem 2rem #00C301, 0 0.5rem 3rem #00AB08;
+    }
+}
+@keyframes shine-red {
+    0% {
+        color: #8B0001;
+        text-shadow: none;
+    }
+    100% {
+        color: #E97452;
+        text-shadow: 0 0 0.6rem #E97452, 0 0 1.5rem #D65D42,
+        -0.2rem 0.1rem 1rem #C34632, 0.2rem 0.1rem 1rem #B12E21,
+        0 -0.5rem 2rem #9E1711, 0 0.5rem 3rem #8B0001;
+    }
+}
+@keyframes shine-yellow {
+    0% {
+        color: #FFEF43;
+        text-shadow: none;
+    }
+    100% {
+        color: #FFFEE6;
+        text-shadow: 0 0 0.6rem #FFFEE6, 0 0 1.5rem #FFFCC6,
+        -0.2rem 0.1rem 1rem #FFFAA8, 0.2rem 0.1rem 1rem #FFF784,
+        0 -0.5rem 2rem #FFF568, 0 0.5rem 3rem #FFEF43;
+    }
+}
+
+@keyframes flicker {
+    from {
+        opacity: 1;
+    }
+
+    4% {
+        opacity: 0.9;
+    }
+
+    6% {
+        opacity: 0.85;
+    }
+
+    8% {
+        opacity: 0.95;
+    }
+
+    10% {
+        opacity: 0.9;
+    }
+
+    11% {
+        opacity: 0.922;
+    }
+
+    12% {
+        opacity: 0.9;
+    }
+
+    14% {
+        opacity: 0.95;
+    }
+
+    16% {
+        opacity: 0.98;
+    }
+
+    17% {
+        opacity: 0.9;
+    }
+
+    19% {
+        opacity: 0.93;
+    }
+
+    20% {
+        opacity: 0.99;
+    }
+
+    24% {
+        opacity: 1;
+    }
+
+    26% {
+        opacity: 0.94;
+    }
+
+    28% {
+        opacity: 0.98;
+    }
+
+    37% {
+        opacity: 0.93;
+    }
+
+    38% {
+        opacity: 0.5;
+    }
+
+    39% {
+        opacity: 0.96;
+    }
+
+    42% {
+        opacity: 1;
+    }
+
+    44% {
+        opacity: 0.97;
+    }
+
+    46% {
+        opacity: 0.94;
+    }
+
+    56% {
+        opacity: 0.9;
+    }
+
+    58% {
+        opacity: 0.9;
+    }
+
+    60% {
+        opacity: 0.99;
+    }
+
+    68% {
+        opacity: 1;
+    }
+
+    70% {
+        opacity: 0.9;
+    }
+
+    72% {
+        opacity: 0.95;
+    }
+
+    93% {
+        opacity: 0.93;
+    }
+
+    95% {
+        opacity: 0.95;
+    }
+
+    97% {
+        opacity: 0.93;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+.ip {
+    margin: 40px 0;
+    text-align: center;
+    padding: 10px;
+    color: aliceblue;
+    background: transparent;
+    font-size: 25px;
+    border: none;
+    box-shadow: none;
+}
+
+@keyframes shine-button {
+    0% {
+        color: #FFFFFF;
+        text-shadow: none;
+    }
+    100% {
+        color: #FFFFFF;
+        box-shadow: 0 0 0.6rem #E97452, 0 0 1.5rem #D65D42,
+        -0.2rem 0.1rem 1rem #C34632, 0.2rem 0.1rem 1rem #B12E21,
+        0 -0.5rem 2rem #9E1711, 0 0.5rem 3rem #8B0001;
+    }
+}
+
+.ip:hover {
+    animation: shine-button 2s forwards;
+}
+
+
+
+@media only screen and (max-width: 600px) {
+    .sign {
+        font-size: 2.5em;
+    }
+}
+
+.online-player{
+    text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000,
+    1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;
+}
+
+.alert {
+    position: absolute;
+    left: 74%;
+    top: 10%;
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
