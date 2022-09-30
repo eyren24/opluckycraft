@@ -2,6 +2,7 @@
 require '../config/functions.php';
 require '../config/AuthMeController.php';
 require '../config/Sha256.php';
+
 session_start();
 
 if (empty($_SESSION['id'])) {
@@ -16,17 +17,16 @@ if (!$userInfo) {
 }
 $userKill = mysqli_query($conn, "SELECT * FROM statz_kills_players WHERE uuid = '" . $userRank['uuid'] . "'");
 $userDeath = mysqli_query($conn, "SELECT * FROM statz_deaths WHERE uuid = '" . $userRank['uuid'] . "'");
+
+
 $userKillCount = 0;
 $userDeathCount = 0;
 
-$dataPoints = array();
-
-while ($kill = mysqli_fetch_all($userKill)) {
-    echo count($kill);
-    $userKillCount ++;
+while ($kill = mysqli_fetch_array($userKill)) {
+    $userKillCount += $kill['value'];
 }
-while ($death = mysqli_fetch_all($userDeath)) {
-    $userDeathCount++;
+while ($death = mysqli_fetch_array($userDeath)) {
+    $userDeathCount += $death['value'];
 }
 
 
@@ -45,35 +45,6 @@ while ($death = mysqli_fetch_all($userDeath)) {
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-
-<script>
-    window.onload = function () {
-
-        var chart = new CanvasJS.Chart("chartContainer", {
-            animationEnabled: true,
-            title:{
-                text: "K/D"
-            },
-            axisY: {
-                title: "Revenue in USD",
-                valueFormatString: "#0,,.",
-                suffix: "mn",
-                prefix: "$"
-            },
-            data: [{
-                type: "spline",
-                markerSize: 5,
-                xValueFormatString: "YYYY",
-                yValueFormatString: "$#,##0.##",
-                xValueType: "dateTime",
-                dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
-            }]
-        });
-
-        chart.render();
-
-    }
-</script>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <!-- Container wrapper -->
@@ -196,8 +167,7 @@ if (isset($_GET['error'])) {
 
 
 </div>
-<div id="chartContainer" style="height: 370px; width: 100%;"></div>
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
         crossorigin="anonymous"></script>

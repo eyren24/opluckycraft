@@ -87,7 +87,7 @@ if ($authme_controller->is_session()) {
                 <div class="container-login100-form-btn">
                     <div class="wrap-login100-form-btn">
                         <div class="login100-form-bgbtn"></div>
-                        <input type="submit" form="myform" name="action" class="login100-form-btn" value="Login">
+                        <button type="submit" form="myform" name="action" class="login100-form-btn" value="Login">Login</button>
                     </div>
                 </div>
                 <div class="text-center p-t-115">
