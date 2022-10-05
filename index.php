@@ -2,14 +2,19 @@
 require 'config/functions.php';
 require 'config/AuthMeController.php';
 require 'config/Sha256.php';
+require 'driver/DriverSQL.php';
+
+
 session_start();
-$authme_controller = new Sha256();
+
 $session = false;
+
 if (isset($_SESSION['id'])) {
     $session = true;
-} else {
-    $session = false;
+    $driver = new DriverSQL();
 }
+
+
 ?>
 
 <!doctype html>
@@ -61,6 +66,9 @@ if (isset($_SESSION['id'])) {
                     <a class="nav-link" href="https://discord.gg/MXQ8hMeRwc">Discord</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="http://localhost/news/">News</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/ticket/">Tickets</a>
                 </li>
                 <li class="nav-item">
@@ -85,7 +93,13 @@ if (isset($_SESSION['id'])) {
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
                     <li><a class="dropdown-item" href="/dashboard/"><i class="fa-solid fa-user"></i> Dashboard</a></li>
-                    <li><a class="dropdown-item" href="#">Option 2</a></li>
+                    <?php
+                        if (mysqli_fetch_array($driver->getPlayerInfo($_SESSION['id']))['username'] == "owner"){
+                            ?> <li><a class="dropdown-item" href="http://localhost/news/dashboard.php"><i class="fa-solid fa-bars-progress"></i> News manager</a></li> <?php
+                        }else{
+                            ?> <li><a class="dropdown-item" href="#"><i class="fa-solid fa-edit"></i> Coming soon !</a></li> <?php
+                        }
+                    ?>
                     <div class="dropdown-divider"></div>
                     <li><a class="dropdown-item" href="/login/logout.php"><i class="fa-solid fa-right-from-bracket"></i>
                             Logout</a></li>
@@ -108,6 +122,25 @@ if (isset($_GET['error'])) {
                 <strong>Error!</strong> Login required.
             </div>
         <?php
+            break;
+        case 'usernameNotFound':
+            ?>
+            <div class="alert" style="width: 20%">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Error!</strong> Username not found.
+            </div>
+            <?php
+            break;
+        case 'permissiondenied':
+            ?>
+            <div class="alert" style="width: 20%">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Error!</strong> Permission Denied.
+            </div>
+            <?php
+            break;
+        default:
+            break;
     }
 }
 ?>

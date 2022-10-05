@@ -8,12 +8,11 @@ function get_from_post_or_empty($index_name) {
 // Login logic
 function process_login($user, $pass, AuthMeController $controller) {
     if ($controller->checkPassword($user, $pass)) {
-        echo '<div class="alert alert-success" role="alert">You logged in ! We redirect you.....</div>';
-        sleep(3);
+        echo '<div class="text-center alert alert-success" role="alert">You logged in!</div>';
         header("Refresh: 2;");
         return true;
     } else {
-      echo '<div class="alert alert-danger" role="alert">Login failed. Please try again</div>';
+      echo '<div class="text-center alert alert-danger" role="alert">Login failed. Please try again</div>';
     }
     return false;
 }

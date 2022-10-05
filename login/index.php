@@ -5,7 +5,7 @@ require '../config/Sha256.php';
 $authme_controller = new Sha256();
 session_start();
 if ($authme_controller->is_session()) {
-    header('LOCATION: /dashboard/');
+    header('LOCATION: /dashboard/?login=loginSuccess');
     exit;
 }
 
@@ -44,7 +44,8 @@ if ($authme_controller->is_session()) {
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
-            <form method="post" enctype="application/x-www-form-urlencoded" name="myform" id="myform" class="login100-form validate-form"
+            <form method="post" enctype="application/x-www-form-urlencoded" name="myform" id="myform"
+                  class="login100-form validate-form"
                   action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                 <?php
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -87,7 +88,9 @@ if ($authme_controller->is_session()) {
                 <div class="container-login100-form-btn">
                     <div class="wrap-login100-form-btn">
                         <div class="login100-form-bgbtn"></div>
-                        <button type="submit" form="myform" name="action" class="login100-form-btn" value="Login">Login</button>
+                        <button type="submit" form="myform" name="action" class="login100-form-btn" value="Login">
+                            Login
+                        </button>
                     </div>
                 </div>
                 <div class="text-center p-t-115">

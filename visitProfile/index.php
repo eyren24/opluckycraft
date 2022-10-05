@@ -1,20 +1,28 @@
 <?php
-require '../config/functions.php';
-require '../config/AuthMeController.php';
-require '../config/Sha256.php';
+if (empty($_GET['username'])) {
+    header("LOCATION: http://localhost?error=usernameNotFound");
+}
 
 session_start();
 
-if (empty($_SESSION['id'])) {
-    header("LOCATION: http://localhost?error=loginRequired");
+$session = false;
+if (isset($_SESSION['id'])) {
+    $session = true;
+} else {
+    $session = false;
 }
+
+$username = $_GET['username'];
+
 $conn = mysqli_connect('opluckycraft.it', 'minecraft', '34gAGozv2U0Pq97TCg', 'minecraft');
 
-$userInfo = mysqli_fetch_array(mysqli_query($conn, "SELECT * from authme where username = '" . $_SESSION['id'] . "'"));
-$userRank = mysqli_fetch_array(mysqli_query($conn, "SELECT * from luckperms_players where username = '" . $userInfo['username'] . "'"));
+$userInfo = mysqli_fetch_array(mysqli_query($conn, "SELECT * from authme where username = '" . $username . "'"));
 if (!$userInfo) {
-    die(mysqli_error($conn));
+    header("LOCATION: http://localhost?error=usernameNotFound");
 }
+$userRank = mysqli_fetch_array(mysqli_query($conn, "SELECT * from luckperms_players where username = '" . $userInfo['username'] . "'"));
+
+
 $userKill = mysqli_query($conn, "SELECT * FROM statz_kills_players WHERE uuid = '" . $userRank['uuid'] . "'");
 $userDeath = mysqli_query($conn, "SELECT * FROM statz_deaths WHERE uuid = '" . $userRank['uuid'] . "'");
 $userTime = mysqli_query($conn, "SELECT * FROM statz_time_played WHERE uuid = '" . $userRank['uuid'] . "'");
@@ -33,10 +41,8 @@ while ($time = mysqli_fetch_array($userTime)) {
 }
 while ($death = mysqli_fetch_array($userDeath)) {
     $userDeathCount += $death['value'];
-}
+} ?>
 
-
-?>
 
 <!doctype html>
 <html lang="en">
@@ -48,7 +54,7 @@ while ($death = mysqli_fetch_array($userDeath)) {
     <script src="https://cdn.jsdelivr.net/gh/leonardosnt/mc-player-counter/dist/mc-player-counter.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link href="/css/dashboard.css" rel="stylesheet">
+    <link href="/css/visitprofile.css" rel="stylesheet">
 </head>
 <body>
 
@@ -96,56 +102,64 @@ while ($death = mysqli_fetch_array($userDeath)) {
             </ul>
             <!-- Left links -->
         </div>
-        <div class="dropdown">
-            <button class="btn btn-outline-dark text-white dropdown-toggle" type="button" id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                <img class="rounded" src="https://minotar.net/helm/<?php echo $_SESSION["id"]; ?>/100.png" alt="Img"
-                     width="25" style="margin-right: 10px;">
-                <?php echo $_SESSION['id'] ?>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#">Option 2</a></li>
-                <div class="dropdown-divider"></div>
-                <li><a class="dropdown-item" href="/login/logout.php"><i class="fa-solid fa-right-from-bracket"></i>
-                        Logout</a></li>
-            </ul>
-        </div>
+        <?php
+        if ($session == false) {
+            ?><a href="/login/">
+                <button type="button" class="btn btn-outline-danger">Login</button>
+            </a><?php
+        } else {
+            ?>
+            <div class="dropdown">
+                <button class="btn btn-outline-dark text-white dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <img class="rounded" src="https://minotar.net/helm/<?php echo $_SESSION["id"]; ?>/100.png" alt="Img"
+                         width="25" style="margin-right: 10px;">
+                    <?php echo $_SESSION['id'] ?>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="/dashboard/"><i class="fa-solid fa-user"></i> Dashboard</a></li>
+                    <?php
+                    if ($userRank['primary_group'] == "owner") {
+                        ?>
+                        <li><a class="dropdown-item" href="http://localhost/news/dashboard.php"><i
+                                        class="fa-solid fa-bars-progress"></i> News manager</a></li> <?php
+                    } else {
+                        ?>
+                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-edit"></i> Coming soon !</a>
+                        </li> <?php
+                    }
+                    ?>
+                    <div class="dropdown-divider"></div>
+                    <li><a class="dropdown-item" href="/login/logout.php"><i class="fa-solid fa-right-from-bracket"></i>
+                            Logout</a></li>
+                </ul>
+            </div>
+            <?php
+        } ?>
         <!-- Collapsible wrapper -->
-    </div>
-    <!-- Container wrapper -->
+        <!-- Container wrapper -->
 </nav>
 
 <?php
-if (isset($_GET['login'])) {
-    switch ($_GET['login']) {
+if (isset($_GET['error'])) {
+    switch ($_GET['error']) {
         case 'loginRequired':
             ?>
-            <div class="alert" style="width: 20%;">
+            <div class="alert" style="width: 20%">
                 <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
                 <strong>Error!</strong> Login required.
             </div>
-            <?php
-            break;
-        case 'loginSuccess':
-            ?>
-            <div class="alert" style="width: 20%; background: #00AB08">
-                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                <strong>Login success!</strong>.
-            </div>
-            <?php
-            break;
-        default:
-            break;
+        <?php
     }
 }
-?>
 
+?>
 <div class="container p-5 rounded mt-5 bg-light">
     <div class="row">
         <div class="col-sm-3">
             <div class="row">
                 <div class="col">
-                    <img src="https://minotar.net/helm/<?php echo $_SESSION["id"]; ?>/100.png">
+                    <img src="https://minotar.net/helm/<?php echo $userInfo['username']; ?>/100.png">
                 </div>
             </div>
             <div class="row mt-4">
@@ -169,8 +183,10 @@ if (isset($_GET['login'])) {
             </div>
             <div class="row">
                 <div class="col">
-                    <h5 style="color: #1b1e21"> Last login: <span style="color: red"><?php echo date('H:i:s', $userInfo['lastlogin']) ?></span></h5>
-                    <h5 style="color: #1b1e21"> Time played: <span style="color: red;"><?php echo date('H:i:s', $userTimeCount) ?></span></h5>
+                    <h5 style="color: #1b1e21"> Last login: <span
+                                style="color: red"><?php echo date('H:i:s', $userInfo['lastlogin']) ?></span></h5>
+                    <h5 style="color: #1b1e21"> Time played: <span
+                                style="color: red;"><?php echo date('H:i:s', $userTimeCount) ?></span></h5>
                 </div>
             </div>
 
@@ -184,7 +200,10 @@ if (isset($_GET['login'])) {
                             <?php
                             for ($i = 0; $i < count($playerKilled); $i++) {
                                 ?>
-                                <li><a href="http://localhost/visitprofile/?username=<?php echo $playerKilled[$i] ?>"><button type="button" class="btn text-danger mt-3"><?php echo $playerKilled[$i] ?></button></a></li>
+                                <li><a href="http://localhost/visitprofile/?username=<?php echo $playerKilled[$i] ?>">
+                                        <button type="button"
+                                                class="btn text-danger mt-3"><?php echo $playerKilled[$i] ?></button>
+                                    </a></li>
                                 <?php
                             }
                             ?>

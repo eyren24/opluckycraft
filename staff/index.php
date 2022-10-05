@@ -2,8 +2,9 @@
 require '../config/functions.php';
 require '../config/AuthMeController.php';
 require '../config/Sha256.php';
+
 session_start();
-$authme_controller = new Sha256();
+
 $session = false;
 if (isset($_SESSION['id'])) {
     $session = true;

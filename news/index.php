@@ -6,13 +6,16 @@ require '../config/Sha256.php';
 session_start();
 
 $session = false;
+
 if (isset($_SESSION['id'])) {
     $session = true;
 } else {
     $session = false;
 }
-?>
 
+$connPosts = mysqli_connect('opluckycraft.it', 'minecraft', '34gAGozv2U0Pq97TCg', 'news');
+$posts = mysqli_query($connPosts, "SELECT * FROM posts WHERE removed = 0 order by date desc");
+?>
 
 <!doctype html>
 <html lang="en">
@@ -24,7 +27,7 @@ if (isset($_SESSION['id'])) {
     <script src="https://cdn.jsdelivr.net/gh/leonardosnt/mc-player-counter/dist/mc-player-counter.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link href="/css/store.css" rel="stylesheet">
+    <link href="/css/news.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -51,19 +54,25 @@ if (isset($_SESSION['id'])) {
             <!-- Left links -->
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/index.php/">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/index.php/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/store/">Store</a>
+                    <a class="nav-link" href="https://opluckycraft.tebex.io/">Store</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Vota</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Discord</a>
+                    <a class="nav-link" href="https://discord.gg/MXQ8hMeRwc">Discord</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Contacts</a>
+                    <a class="nav-link" href="http://localhost/news/">News</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ticket/">Tickets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/staff/">Staff</a>
                 </li>
             </ul>
             <!-- Left links -->
@@ -84,7 +93,7 @@ if (isset($_SESSION['id'])) {
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
                     <li><a class="dropdown-item" href="/dashboard/"><i class="fa-solid fa-user"></i> Dashboard</a></li>
-                    <li><a class="dropdown-item" href="#">Option 2</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-edit"></i> Coming soon !</a></li>
                     <div class="dropdown-divider"></div>
                     <li><a class="dropdown-item" href="/login/logout.php"><i class="fa-solid fa-right-from-bracket"></i>
                             Logout</a></li>
@@ -97,54 +106,56 @@ if (isset($_SESSION['id'])) {
     <!-- Container wrapper -->
 </nav>
 
-<div class="container store text-center mt-5">
-    <div class="row">
-        <div class="col">
-            STORE
+
+<div class="header">
+    <h2 class="fw-bold"><span class="text-danger">OP</span><span class="text-warning">LUCKY</span><span
+                class="text-success">CRAFT</span> <span class="animate-charcter"> NEWS</span></h2>
+</div>
+
+<div class="row">
+    <div class="leftcolumn">
+        <?php
+        while ($post = mysqli_fetch_array($posts)) {
+            ?>
+            <div class="card mb-5">
+                <h2><?php echo $post['title']; ?></h2>
+                <h5 class="mt-3 mb-1"><?php echo $post['author']; ?>, <?php echo $post['date']; ?></h5>
+                <?php if ($post['img'] != null){ ?>  <img alt="" class="rounded" height="350px" src="uploads/<?php echo $post['img']; ?>" ><?php } ?>
+                <mark class="mt-3 rounded"><p><?php echo $post['description']; ?></p></mark>
+            </div>
+
+
+            <?php
+        }
+        ?>
+    </div>
+    <div class="rightcolumn">
+        <div class="card">
+            <h2>About Me</h2>
+            <div class="fakeimg" style="height:100px;">Image</div>
+            <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+        </div>
+        <div class="card">
+            <h3>Popular Post</h3>
+            <div class="fakeimg">Image</div>
+            <br>
+            <div class="fakeimg">Image</div>
+            <br>
+            <div class="fakeimg">Image</div>
+        </div>
+        <div class="card">
+            <h3>Follow Me</h3>
+            <p>Some text..</p>
         </div>
     </div>
 </div>
 
-<section style="background-color: #eee;">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6 col-xl-4">
-                <div class="card text-black">
-                    <img src="/img/vip1.png"
-                         class="card-img-top" alt="VIP1" />
-                    <div class="card-body">
-                        <div class="text-center">
-                            <h5 class="card-title">VIP 1</h5>
-                            <p class="text-muted mb-4">Other thing</p>
-                        </div>
-                        <div>
-                            <div class="d-flex justify-content-between">
-                                <span>Rewards 1</span><span> <i class="text-success fa-sharp fa-solid fa-check"></i></span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span>Rewards 2</span><span> <i class="text-danger fa-solid fa-xmark"></i></span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span>Rewards 3</span><span> <i class="text-danger fa-solid fa-xmark"></i></span>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between total font-weight-bold mt-4">
-                            <span>Total</span><span>$7,197.00</span>
-                        </div>
-                        <?php if ($session) {
-                            ?><button type="button" class="mt-5 btn btn-outline-info" style="width: 100%">Buy</button><?php
-                        }?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
+<div class="footer">
+    <h2>Footer</h2>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
         crossorigin="anonymous"></script>
 </body>
 </html>
-
