@@ -9,9 +9,10 @@ session_start();
 
 $session = false;
 
+$driver = new DriverSQL();
+
 if (isset($_SESSION['id'])) {
     $session = true;
-    $driver = new DriverSQL();
 }
 
 
@@ -78,7 +79,7 @@ if (isset($_SESSION['id'])) {
             <!-- Left links -->
         </div>
         <?php
-        if ($session == false) {
+        if (!$session) {
             ?><a href="/login/">
                 <button type="button" class="btn btn-outline-danger">Login</button>
             </a><?php
@@ -94,7 +95,7 @@ if (isset($_SESSION['id'])) {
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
                     <li><a class="dropdown-item" href="/dashboard/"><i class="fa-solid fa-user"></i> Dashboard</a></li>
                     <?php
-                        if (mysqli_fetch_array($driver->getPlayerInfo($_SESSION['id']))['username'] == "owner"){
+                        if (mysqli_fetch_array($driver->getPlayerInfo($_SESSION['id']))['primary_group'] == "owner"){
                             ?> <li><a class="dropdown-item" href="http://localhost/news/dashboard.php"><i class="fa-solid fa-bars-progress"></i> News manager</a></li> <?php
                         }else{
                             ?> <li><a class="dropdown-item" href="#"><i class="fa-solid fa-edit"></i> Coming soon !</a></li> <?php

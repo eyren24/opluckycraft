@@ -2,38 +2,16 @@
 require '../config/functions.php';
 require '../config/AuthMeController.php';
 require '../config/Sha256.php';
+require '../driver/DriverSQL.php';
 
 session_start();
+
+$driver = new DriverSQL();
 
 if (empty($_SESSION['id'])) {
     header("LOCATION: http://localhost?error=loginRequired");
 }
-$conn = mysqli_connect('opluckycraft.it', 'minecraft', '34gAGozv2U0Pq97TCg', 'minecraft');
 
-$userInfo = mysqli_fetch_array(mysqli_query($conn, "SELECT * from authme where username = '" . $_SESSION['id'] . "'"));
-$userRank = mysqli_fetch_array(mysqli_query($conn, "SELECT * from luckperms_players where username = '" . $userInfo['username'] . "'"));
-if (!$userInfo) {
-    die(mysqli_error($conn));
-}
-$userKill = mysqli_query($conn, "SELECT * FROM statz_kills_players WHERE uuid = '" . $userRank['uuid'] . "'");
-$userDeath = mysqli_query($conn, "SELECT * FROM statz_deaths WHERE uuid = '" . $userRank['uuid'] . "'");
-$userTime = mysqli_query($conn, "SELECT * FROM statz_time_played WHERE uuid = '" . $userRank['uuid'] . "'");
-
-$userKillCount = 0;
-$userDeathCount = 0;
-$userTimeCount = 0;
-$playerKilled = array();
-
-while ($kill = mysqli_fetch_array($userKill)) {
-    array_push($playerKilled, $kill['playerKilled']);
-    $userKillCount += $kill['value'];
-}
-while ($time = mysqli_fetch_array($userTime)) {
-    $userTimeCount += $time['value'];
-}
-while ($death = mysqli_fetch_array($userDeath)) {
-    $userDeathCount += $death['value'];
-}
 
 
 ?>
@@ -151,9 +129,9 @@ if (isset($_GET['login'])) {
             <div class="row mt-4">
                 <div class="col">
                     <h5 style="color:#1b1e21">Player: <span
-                                style="color: red"><?php echo($userInfo['username']); ?></span></h5>
+                                style="color: red"><?php echo mysqli_fetch_array($driver->getPlayerStats($_SESSION['id']))['uuid'] ; ?></span></h5>
                     <h5 style="color:#1b1e21">Rank: <span
-                                style="color: red"><?php if ($userRank['primary_group'] == 'default') echo('starter'); else echo($userRank['primary_group']); ?></span>
+                                style="color: red"><?php //if ($userRank['primary_group'] == 'default') echo('starter'); else echo($userRank['primary_group']); ?></span>
                     </h5>
                 </div>
             </div>
@@ -163,14 +141,14 @@ if (isset($_GET['login'])) {
                 <div class="col">
                     <h1 style="color: #1b1e21">Stats</h1>
                     <h5 style="color:#1b1e21"> K/D: <span
-                                style="color: red"><?php echo number_format((float)$userKillCount / $userDeathCount, 2, '.', ''); ?></span>
+                                style="color: red"><?php //echo number_format((float)$userKillCount / $userDeathCount, 2, '.', ''); ?></span>
                     </h5>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <h5 style="color: #1b1e21"> Last login: <span style="color: red"><?php echo date('H:i:s', $userInfo['lastlogin']) ?></span></h5>
-                    <h5 style="color: #1b1e21"> Time played: <span style="color: red;"><?php echo date('H:i:s', $userTimeCount) ?></span></h5>
+                    <h5 style="color: #1b1e21"> Last login: <span style="color: red"><?php //echo date('H:i:s', $userInfo['lastlogin']) ?></span></h5>
+                    <h5 style="color: #1b1e21"> Time played: <span style="color: red;"><?php //echo date('H:i:s', $userTimeCount) ?></span></h5>
                 </div>
             </div>
 
@@ -182,11 +160,11 @@ if (isset($_GET['login'])) {
                         <h5>Player Killed</h5>
                         <ul>
                             <?php
-                            for ($i = 0; $i < count($playerKilled); $i++) {
+                            /*for ($i = 0; $i < count($playerKilled); $i++) {
                                 ?>
                                 <li><a href="http://localhost/visitprofile/?username=<?php echo $playerKilled[$i] ?>"><button type="button" class="btn text-danger mt-3"><?php echo $playerKilled[$i] ?></button></a></li>
                                 <?php
-                            }
+                            }*/
                             ?>
                         </ul>
                     </nav>
